@@ -30,12 +30,41 @@ BaseEntity::~BaseEntity()
 
 void BaseEntity::Think()
 {
-	//Flock behaviour
+	if (getPosition().x <= 0.0f || getPosition().x >= 800.0f || getPosition().y <= 0.0f || getPosition().y >= 600.0f)
+	{
+		setPosition(UtilRandom::instance()->GetRange(0.0f, 800.0f), UtilRandom::instance()->GetRange(0.0f, 600.0f));
+	}
+	float radius = 25.0f;
 	
+	sf::Vector2f mediumVelocity = sf::Vector2f(0.0f, 0.0f);
+	sf::Vector2f mediumPosition = sf::Vector2f(0.0f, 0.0f);
+	//Flock behaviour
+	for (auto neighbour : Renderables)
+	{
+		if (neighbour == this) continue;
+
+		//This is the formula to see if a point (in this case the position of the neighbour) is inside the circle (the area of neighbours)
+		if (std::sqrt(std::pow(neighbour->getOrigin().x - this->getOrigin().x, 2) + std::pow(neighbour->getOrigin().y - this->getOrigin().y, 2)) < radius)
+		{
+			sf::Vector2f weight = neighbour->getPosition() - this->getPosition();
+			weight.x = weight.x / std::sqrt(weight.x * weight.x + weight.y * weight.y);
+			weight.y = weight.y / std::sqrt(weight.x * weight.x + weight.y * weight.y);
+			weight = weight / std::sqrt(std::pow(neighbour->getPosition().x - this->getPosition().x, 2) + std::pow(neighbour->getPosition().y - this->getPosition().y, 2));
+			
+			mediumVelocity += neighbour->GetVelocity() + weight;
+			mediumPosition += neighbour->getPosition() + weight;
+		}
+	}
+
+	mediumVelocity.x = mediumVelocity.x / Renderables.size();
+	mediumVelocity.y = mediumVelocity.y / Renderables.size();
+
+	mediumPosition.x = mediumPosition.x / Renderables.size();
+	mediumPosition.y = mediumPosition.y / Renderables.size();
 	// build a new position vector by adding a scaled version of the velocity vector
-	sf::Vector2f pos = getPosition() + (velocity * 0.1f);
-	// update our position
-	setPosition(pos);
+	sf::Vector2f pos = getPosition() - mediumPosition + mediumVelocity;
+	//setPosition(pos);
+	this->move(pos);
 }
 
 void BaseEntity::Initialize()

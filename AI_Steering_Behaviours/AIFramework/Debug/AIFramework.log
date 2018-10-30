@@ -1,7 +1,3 @@
 ﻿  BaseEntity.cpp
-e:\programe\ai protfolio\portfolio-petrut123\ai_steering_behaviours\aiframework\baseentity.cpp(58): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-  AIFramework.vcxproj -> E:\programe\AI protfolio\portfolio-petrut123\AI_Steering_Behaviours\AIFramework\Debug\AIFramework.exe
+c:\petrut ai\portfolio-petrut123\ai_steering_behaviours\aiframework\baseentity.cpp(89): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  AIFramework.vcxproj -> C:\Petrut AI\portfolio-petrut123\AI_Steering_Behaviours\AIFramework\Debug\AIFramework.exe

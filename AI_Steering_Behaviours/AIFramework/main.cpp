@@ -37,20 +37,6 @@ int main()
 		for ( auto entity : BaseEntity::Renderables )
 		{
 			entity->Think();
-			float radius = 25.0f;
-			for (auto neighbour : BaseEntity::Renderables)
-			{
-				//This is the formula to see if a point (in this case the position of the neighbour) is inside the circle (the area of neighbours)
-				if (sqrtf(powf(neighbour->getOrigin().x - entity->getOrigin().x, 2) + powf(neighbour->getOrigin().y - entity->getOrigin().y, 2)) < radius)
-				{
-					sf::Vector2f weight = neighbour->getPosition() - entity->getPosition();
-					weight.x = weight.x / sqrtf(weight.x * weight.x + weight.y * weight.y);
-					weight.y = weight.y / sqrtf(weight.x * weight.x + weight.y * weight.y);
-					weight = weight / sqrtf(powf(neighbour->getOrigin().x - entity->getOrigin().x, 2) + powf(neighbour->getOrigin().y - entity->getOrigin().y, 2));
-					//How do I get the velocity of the entity?
-				}
-			}
-			
 		}
 
 		// and then draw them
