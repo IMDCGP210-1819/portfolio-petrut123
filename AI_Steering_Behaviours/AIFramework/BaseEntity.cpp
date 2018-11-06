@@ -30,34 +30,15 @@ BaseEntity::~BaseEntity()
 
 void BaseEntity::Think()
 {
-	sf::Vector2f pos;
-	if (getPosition().x <= 0)
-	{
-		setPosition(sf::Vector2f(800.f, getPosition().y));
-	}
+	
 
-	if (getPosition().x >= 800)
-	{
-		setPosition(sf::Vector2f(0.0f, getPosition().y));
-	}
-
-	if (getPosition().y <= 0)
-	{
-		setPosition(sf::Vector2f(getPosition().x, 600.0f));
-	}
-
-	if (getPosition().y >= 600)
-	{
-		setPosition(sf::Vector2f(getPosition().x, 0.0f));
-	}
-
-	float radius = 25.0f;
+	float radius = 100.0f;
 	int neighourCount = 0;
 
 	sf::Vector2f mediumVelocity = sf::Vector2f(0.0f, 0.0f);
 	sf::Vector2f mediumPosition = sf::Vector2f(0.0f, 0.0f);
 	sf::Vector2f separationVector = sf::Vector2f(0.0f, 0.0f);
-	//Flock behaviour
+
 	for (auto neighbour : Renderables)
 	{
 		if (neighbour == this) continue;
@@ -66,53 +47,65 @@ void BaseEntity::Think()
 		float distance = std::sqrt(std::pow(neighbour->getPosition().x - this->getPosition().x, 2) + std::pow(neighbour->getPosition().y - this->getPosition().y, 2));
 		if (distance <= radius)
 		{
-			if (distance > 0)
-			{
-				sf::Vector2f weight;
-				weight.x = (weight.x / std::sqrt(weight.x * weight.x + weight.y * weight.y)) / distance;
-				weight.y = (weight.y / std::sqrt(weight.x * weight.x + weight.y * weight.y)) / distance;
-				separationVector += weight;
-			}
-			else
-			{
-				separationVector += sf::Vector2f(0, 0);
-			}
+			sf::Vector2f weight = sf::Vector2f(0.0f, 0.0f);
+			weight = neighbour->getPosition() - getPosition();
+			weight = (weight / std::sqrt(weight.x * weight.x + weight.y * weight.y)) / distance;
+
+			separationVector += weight;
 			mediumVelocity += neighbour->GetVelocity();
 			mediumPosition += neighbour->getPosition();
 			neighourCount++;
 		}
 	}
 
-	separationVector.x = separationVector.x / neighourCount * -1;
-	separationVector.y = separationVector.y / neighourCount * -1;
-	//Normalization
-	separationVector.x = separationVector.x / std::sqrt(separationVector.x * separationVector.x + separationVector.y * separationVector.y);
-	separationVector.y = separationVector.y / std::sqrt(separationVector.x * separationVector.x + separationVector.y * separationVector.y);
+	if (neighourCount > 0)
+	{
+		separationVector = separationVector / (float)neighourCount * -1.0f;
 
-	mediumVelocity.x = mediumVelocity.x / neighourCount;
-	mediumVelocity.y = mediumVelocity.y / neighourCount;
-	//Normalization
-	mediumVelocity.x = mediumVelocity.x / sqrt((mediumVelocity.x * mediumVelocity.x) + (mediumVelocity.y * mediumVelocity.y));
-	mediumVelocity.y = mediumVelocity.y / sqrt((mediumVelocity.x * mediumVelocity.x) + (mediumVelocity.y * mediumVelocity.y));
+		//Normalization
+		separationVector = separationVector / std::sqrt(separationVector.x * separationVector.x + separationVector.y * separationVector.y);
 
-	mediumPosition.x = mediumPosition.x / neighourCount;
-	mediumPosition.y = mediumPosition.y / neighourCount;
-	mediumPosition = sf::Vector2f(mediumPosition.x - getPosition().x, mediumPosition.y - getPosition().y);
-	//Normalization
-	mediumPosition.x = mediumPosition.x / sqrt((mediumPosition.x * mediumPosition.x) + (mediumPosition.y * mediumPosition.y));
-	mediumPosition.y = mediumPosition.y / sqrt((mediumPosition.x * mediumPosition.x) + (mediumPosition.y * mediumPosition.y));
+		mediumVelocity = mediumVelocity / (float)neighourCount;
+		//Normalization
+		mediumVelocity = mediumVelocity / abs(sqrt((mediumVelocity.x * mediumVelocity.x) + (mediumVelocity.y * mediumVelocity.y)));
+
+		mediumPosition = mediumPosition / (float)neighourCount;
+
+		mediumPosition = mediumPosition - getPosition();
+		//Normalization
+		mediumPosition = mediumPosition / abs(sqrt((mediumPosition.x * mediumPosition.x) + (mediumPosition.y * mediumPosition.y)));
+
+		velocity += mediumVelocity + mediumPosition + separationVector;
+	}
 	
-	velocity += mediumVelocity + mediumPosition + separationVector;
-
 	//Normalization
-	velocity.x - velocity.x / sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y));
-	velocity.y - velocity.y / sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y));
-
+	velocity += velocity / abs(sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y)));
+	
 	//Multiply by the default speed
-	//velocity *= 1.2f;
+	velocity *= 0.04f;
+
+	float angle = atan2(velocity.y, velocity.x);
+	setRotation(angle * 180 / M_PI);
+	
 	this->move(velocity);
-	
-	
+
+	if (getPosition().x <= 0)
+	{
+		setPosition(sf::Vector2f(800.f, getPosition().y));
+	} 
+	else if (getPosition().x >= 800)
+	{
+		setPosition(sf::Vector2f(0.0f, getPosition().y));
+	}
+
+	if (getPosition().y <= 0)
+	{
+		setPosition(sf::Vector2f(getPosition().x, 600.0f));
+	} 
+	else if (getPosition().y >= 600)
+	{
+		setPosition(sf::Vector2f(getPosition().x, 0.0f));
+	}
 }
 
 void BaseEntity::Initialize()

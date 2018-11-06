@@ -1,9 +1,2 @@
-﻿  BaseEntity.cpp
-e:\programe\ai protfolio\portfolio-petrut123\ai_steering_behaviours\aiframework\baseentity.cpp(108): warning C4552: '-': result of expression not used
-e:\programe\ai protfolio\portfolio-petrut123\ai_steering_behaviours\aiframework\baseentity.cpp(109): warning C4552: '-': result of expression not used
-e:\programe\ai protfolio\portfolio-petrut123\ai_steering_behaviours\aiframework\baseentity.cpp(137): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-  AIFramework.vcxproj -> E:\programe\AI protfolio\portfolio-petrut123\AI_Steering_Behaviours\AIFramework\Debug\AIFramework.exe
+﻿  main.cpp
+  AIFramework.vcxproj -> C:\Petrut AI\portfolio-petrut123\AI_Steering_Behaviours\AIFramework\Debug\AIFramework.exe

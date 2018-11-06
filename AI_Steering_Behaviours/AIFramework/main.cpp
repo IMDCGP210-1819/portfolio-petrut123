@@ -8,13 +8,13 @@
 int main()
 {
 	// construct a window that uses a resolution of 800 x 600
-	sf::RenderWindow window(sf::VideoMode(800, 600), "AI Framework");
+	sf::RenderWindow window(sf::VideoMode(1080, 900), "AI Framework");
 
 	// because we're running as a console application, we still get access to the console, so can use std::cout to print to it
 	std::cout << "Constructed SFML Window" << std::endl;
 
 	// construct 5 base entities
-	for (int i = 0; i < 20; i++) 
+	for (int i = 0; i < 50; i++) 
 	{
 		BaseEntity *boid = new BaseEntity();
 	}
