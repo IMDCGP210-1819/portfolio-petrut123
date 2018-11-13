@@ -14,9 +14,10 @@ int main()
 	std::cout << "Constructed SFML Window" << std::endl;
 
 	// construct 5 base entities
-	for (int i = 0; i < 50; i++) 
+	for (int i = 0; i < 1; i++) 
 	{
 		BaseEntity *boid = new BaseEntity();
+		boid->setOrigin(16.0f, 16.0f);
 	}
 
 	// our game loop

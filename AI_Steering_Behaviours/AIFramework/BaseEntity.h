@@ -74,6 +74,61 @@ public:
 		return velocity;
 	}
 
+	void FlockBehaviour() 
+	{
+		float radius = 100.0f;
+		int neighourCount = 0;
+
+		sf::Vector2f mediumVelocity = sf::Vector2f(0.0f, 0.0f);
+		sf::Vector2f mediumPosition = sf::Vector2f(0.0f, 0.0f);
+		sf::Vector2f separationVector = sf::Vector2f(0.0f, 0.0f);
+
+		for (auto neighbour : Renderables)
+		{
+			if (neighbour == this) continue;
+
+			//This is the formula to see if a point (in this case the position of the neighbour) is inside the circle (the area of neighbours)
+			float distance = std::sqrt(std::pow(neighbour->getPosition().x - this->getPosition().x, 2) + std::pow(neighbour->getPosition().y - this->getPosition().y, 2));
+			if (distance <= radius)
+			{
+				sf::Vector2f weight = sf::Vector2f(0.0f, 0.0f);
+				weight = neighbour->getPosition() - getPosition();
+				weight = (weight / std::sqrt(weight.x * weight.x + weight.y * weight.y)) / distance;
+
+				separationVector += weight;
+				mediumVelocity += neighbour->GetVelocity();
+				mediumPosition += neighbour->getPosition();
+				neighourCount++;
+			}
+		}
+
+		if (neighourCount > 0)
+		{
+			separationVector = separationVector / (float)neighourCount * -1.0f;
+
+			//Normalization
+			separationVector = separationVector / std::sqrt(separationVector.x * separationVector.x + separationVector.y * separationVector.y);
+
+			mediumVelocity = mediumVelocity / (float)neighourCount;
+			//Normalization
+			mediumVelocity = mediumVelocity / abs(sqrt((mediumVelocity.x * mediumVelocity.x) + (mediumVelocity.y * mediumVelocity.y)));
+
+			mediumPosition = mediumPosition / (float)neighourCount;
+
+			mediumPosition = mediumPosition - getPosition();
+			//Normalization
+			mediumPosition = mediumPosition / abs(sqrt((mediumPosition.x * mediumPosition.x) + (mediumPosition.y * mediumPosition.y)));
+
+			velocity += mediumVelocity + mediumPosition + separationVector;
+		}
+
+		//Normalization
+		velocity += velocity / abs(sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y)));
+
+		//Multiply by the default speed
+		velocity *= 0.04f;
+	}
+
 protected:
 	std::string filename;
 	sf::Sprite sprite;

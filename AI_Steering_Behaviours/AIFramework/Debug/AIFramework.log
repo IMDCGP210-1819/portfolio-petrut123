@@ -1,2 +1,4 @@
-﻿  main.cpp
+﻿  BaseEntity.cpp
+c:\petrut ai\portfolio-petrut123\ai_steering_behaviours\aiframework\baseentity.cpp(54): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\petrut ai\portfolio-petrut123\ai_steering_behaviours\aiframework\baseentity.cpp(96): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   AIFramework.vcxproj -> C:\Petrut AI\portfolio-petrut123\AI_Steering_Behaviours\AIFramework\Debug\AIFramework.exe
