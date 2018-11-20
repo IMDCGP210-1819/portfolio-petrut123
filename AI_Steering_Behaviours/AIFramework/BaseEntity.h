@@ -50,7 +50,7 @@ public:
 	 * Think is the standard "update" function for all agents
 	 * All agents must implement their own Think function - there is nothing provided in the base class.
 	 */
-	virtual void Think();
+	virtual void Think(sf::RenderWindow &window);
 
 	/**
 	 * GetSprite provides access to the entities sprite object
@@ -127,6 +127,61 @@ public:
 
 		//Multiply by the default speed
 		velocity *= 0.04f;
+	}
+
+	void SeekFleeBehaviour(sf::RenderWindow &window, bool seek)
+	{
+		sf::Vector2f desiredVelocity;
+		sf::Vector2f steeringVector;
+
+		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+
+		if (seek)
+		{
+			desiredVelocity.x = mousePosition.x - this->getPosition().x;
+			desiredVelocity.y = mousePosition.y - this->getPosition().y;
+		}
+		else
+		{
+			desiredVelocity.x = this->getPosition().x - mousePosition.x;
+			desiredVelocity.y = this->getPosition().y - mousePosition.y;
+		}
+		
+
+		//Normalization
+		desiredVelocity = desiredVelocity / std::sqrt(desiredVelocity.x * desiredVelocity.x + desiredVelocity.y * desiredVelocity.y);
+		desiredVelocity *= 0.04f;
+
+		steeringVector = desiredVelocity - velocity;
+
+		velocity += steeringVector;
+
+		//Normalization
+		velocity = velocity / std::sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y));
+		velocity *= 0.04f;
+
+		float angle = atan2(velocity.y, velocity.x);
+		setRotation(angle * 180 / M_PI);
+
+		this->move(velocity);
+
+		if (getPosition().x <= 0)
+		{
+			setPosition(sf::Vector2f(1080.0f, getPosition().y));
+		}
+		else if (getPosition().x >= 1080.0f)
+		{
+			setPosition(sf::Vector2f(0.0f, getPosition().y));
+		}
+
+		if (getPosition().y <= 0)
+		{
+			setPosition(sf::Vector2f(getPosition().x, 900.0f));
+		}
+		else if (getPosition().y >= 900.0f)
+		{
+			setPosition(sf::Vector2f(getPosition().x, 0.0f));
+		}
 	}
 
 protected:

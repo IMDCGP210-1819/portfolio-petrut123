@@ -20,6 +20,18 @@ int main()
 		boid->setOrigin(16.0f, 16.0f);
 	}
 
+	sf::Texture texture;
+
+	texture.loadFromFile("assets\\boid.png");
+	texture.setSmooth(true);
+	// and provide the sprite with a pointer to the texture object
+	// if the texture object is destroyed (goes out of scope etc) then the sprite will display weirdly
+
+	sf::Sprite sprite;
+
+	sprite.setTexture(texture);
+
+	//sprite.setScale(0.5f, 0.5f);
 	// our game loop
 	while (window.isOpen())
 	{
@@ -37,7 +49,7 @@ int main()
 		// update all our entities
 		for ( auto entity : BaseEntity::Renderables )
 		{
-			entity->Think();
+			entity->Think(window);
 		}
 
 		// and then draw them
@@ -45,6 +57,11 @@ int main()
 		{
 			window.draw(entity->GetSprite(), entity->getTransform());
 		}
+
+		sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+
+		sprite.setPosition(sf::Vector2f(mousePos.x, mousePos.y));
+		window.draw(sprite);
 
 		// swap the frame buffers
 		window.display();

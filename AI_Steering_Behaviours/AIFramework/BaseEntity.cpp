@@ -29,49 +29,13 @@ BaseEntity::~BaseEntity()
 	
 }
 
-void BaseEntity::Think()
+void BaseEntity::Think(sf::RenderWindow &window)
 {
-	sf::Vector2f desiredVelocity;
-	sf::Vector2f steeringVector;
+	//Flocking behaviour
+	//FlockBehaviour();
 
-	sf::Vector2i mousePosition = sf::Mouse::getPosition();
-	desiredVelocity.x = mousePosition.x - this->getPosition().x;
-	desiredVelocity.y = mousePosition.y - this->getPosition().y;
-
-	//Normalization
-	desiredVelocity = desiredVelocity / std::sqrt(desiredVelocity.x * desiredVelocity.x + desiredVelocity.y * desiredVelocity.y);
-	desiredVelocity *= 0.04f;
-
-	steeringVector = desiredVelocity - velocity;
-
-	velocity = velocity + steeringVector;
-	
-	//Normalization
-	velocity = velocity / abs(sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y)));
-	velocity *= 0.04f;
-
-	float angle = atan2(velocity.y, velocity.x);
-	setRotation(angle * 180 / M_PI);
-	
-	this->move(velocity);
-
-	if (getPosition().x <= 0)
-	{
-		setPosition(sf::Vector2f(1080.0f, getPosition().y));
-	} 
-	else if (getPosition().x >= 1080.0f)
-	{
-		setPosition(sf::Vector2f(0.0f, getPosition().y));
-	}
-
-	if (getPosition().y <= 0)
-	{
-		setPosition(sf::Vector2f(getPosition().x, 900.0f));
-	} 
-	else if (getPosition().y >= 900.0f)
-	{
-		setPosition(sf::Vector2f(getPosition().x, 0.0f));
-	}
+	//Seek behaviour (pass true for seek and false for flee)
+	//SeekFleeBehaviour(window, true);
 }
 
 void BaseEntity::Initialize()
