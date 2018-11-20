@@ -36,6 +36,19 @@ void BaseEntity::Think(sf::RenderWindow &window)
 
 	//Seek behaviour (pass true for seek and false for flee)
 	//SeekFleeBehaviour(window, true);
+	sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+	float distance = std::sqrt(std::powf(mousePosition.x - this->getPosition().x, 2) + (std::powf(mousePosition.y - this->getPosition().y, 2)));
+
+	float ramped_speed = 0.1f * (distance) / 30.0f;
+
+	if (ramped_speed > 0.1f)
+	{
+		ramped_speed = 0.1f;
+	}
+
+	//float desiredVelocity = (ramped_speed / distance);
+
+
 }
 
 void BaseEntity::Initialize()
