@@ -14,7 +14,7 @@ int main()
 	std::cout << "Constructed SFML Window" << std::endl;
 
 	// construct 5 base entities
-	for (int i = 0; i < 1; i++) 
+	for (int i = 0; i < 50; i++) 
 	{
 		BaseEntity *boid = new BaseEntity();
 		boid->setOrigin(16.0f, 16.0f);
@@ -57,11 +57,6 @@ int main()
 		{
 			window.draw(entity->GetSprite(), entity->getTransform());
 		}
-
-		sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-
-		sprite.setPosition(sf::Vector2f(mousePos.x, mousePos.y));
-		window.draw(sprite);
 
 		// swap the frame buffers
 		window.display();

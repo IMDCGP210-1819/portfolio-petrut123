@@ -76,6 +76,7 @@ public:
 
 	void FlockBehaviour() 
 	{
+		float maxSpeed = 0.04f;
 		float radius = 100.0f;
 		int neighourCount = 0;
 
@@ -83,6 +84,7 @@ public:
 		sf::Vector2f mediumPosition = sf::Vector2f(0.0f, 0.0f);
 		sf::Vector2f separationVector = sf::Vector2f(0.0f, 0.0f);
 
+		//Loop through all the boids and find the ones in a certain radius to form a flock
 		for (auto neighbour : Renderables)
 		{
 			if (neighbour == this) continue;
@@ -125,15 +127,40 @@ public:
 		//Normalization
 		velocity += velocity / abs(sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y)));
 
-		//Multiply by the default speed
-		velocity *= 0.04f;
+		//Multiply by the max speed
+		velocity *= maxSpeed;
+
+		//Set the rotation of the boid to match the direction of moving
+		float angle = atan2(velocity.y, velocity.x);
+		setRotation(angle * 180 / M_PI);
+
+		this->move(velocity);
+
+		if (getPosition().x <= 0)
+		{
+			setPosition(sf::Vector2f(1080.0f, getPosition().y));
+		}
+		else if (getPosition().x >= 1080.0f)
+		{
+			setPosition(sf::Vector2f(0.0f, getPosition().y));
+		}
+
+		if (getPosition().y <= 0)
+		{
+			setPosition(sf::Vector2f(getPosition().x, 900.0f));
+		}
+		else if (getPosition().y >= 900.0f)
+		{
+			setPosition(sf::Vector2f(getPosition().x, 0.0f));
+		}
 	}
 
 	void SeekFleeBehaviour(sf::RenderWindow &window, bool seek)
 	{
+		float maxSpeed = 0.04f;
 		sf::Vector2f desiredVelocity;
 		sf::Vector2f steeringVector;
-
+		//Uses the mouse position as a target
 		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 
 		if (seek)
@@ -150,7 +177,7 @@ public:
 
 		//Normalization
 		desiredVelocity = desiredVelocity / std::sqrt(desiredVelocity.x * desiredVelocity.x + desiredVelocity.y * desiredVelocity.y);
-		desiredVelocity *= 0.04f;
+		desiredVelocity *= maxSpeed;
 
 		steeringVector = desiredVelocity - velocity;
 
@@ -158,10 +185,74 @@ public:
 
 		//Normalization
 		velocity = velocity / std::sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y));
-		velocity *= 0.04f;
+		velocity *= maxSpeed;
 
+		//Set the rotation of the boid to match the direction of moving
 		float angle = atan2(velocity.y, velocity.x);
 		setRotation(angle * 180 / M_PI);
+
+		this->move(velocity);
+
+		if (getPosition().x <= 0)
+		{
+			setPosition(sf::Vector2f(1080.0f, getPosition().y));
+		}
+		else if (getPosition().x >= 1080.0f)
+		{
+			setPosition(sf::Vector2f(0.0f, getPosition().y));
+		}
+
+		if (getPosition().y <= 0)
+		{
+			setPosition(sf::Vector2f(getPosition().x, 900.0f));
+		}
+		else if (getPosition().y >= 900.0f)
+		{
+			setPosition(sf::Vector2f(getPosition().x, 0.0f));
+		}
+	}
+
+	void ArrivalBehaviour(sf::RenderWindow &window)
+	{
+		float maxSpeed = 1.5f;
+		float slowingRadius = 500.0f;
+		sf::Vector2f desiredVelocity;
+		sf::Vector2f steeringVector;
+		//Uses the mouse position as a target
+		sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+
+		desiredVelocity.x = mousePosition.x - this->getPosition().x;
+		desiredVelocity.y = mousePosition.y - this->getPosition().y;
+
+
+		//Normalization
+		desiredVelocity = desiredVelocity / std::sqrt(desiredVelocity.x * desiredVelocity.x + desiredVelocity.y * desiredVelocity.y);
+
+
+
+		float distance = std::sqrt(std::pow(this->getPosition().x - mousePosition.x, 2) + std::pow(this->getPosition().y - mousePosition.y, 2));
+		std::cout << distance << std::endl;
+		if (distance <= slowingRadius)
+		{
+			desiredVelocity.x = desiredVelocity.x * maxSpeed * (distance / slowingRadius);
+			desiredVelocity.y = desiredVelocity.y * maxSpeed * (distance / slowingRadius);
+		}
+		else
+		{
+			desiredVelocity *= maxSpeed;
+		}
+
+		steeringVector = desiredVelocity - velocity;
+
+
+
+		velocity += steeringVector;
+		velocity *= maxSpeed;
+
+		//Set the rotation of the boid to match the direction of moving
+		float angle = atan2(velocity.y, velocity.x);
+		setRotation(angle * 180 / M_PI);
+
 
 		this->move(velocity);
 

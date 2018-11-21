@@ -1,4 +1,15 @@
 ﻿  BaseEntity.cpp
-c:\petrut ai\portfolio-petrut123\ai_steering_behaviours\aiframework\baseentity.cpp(55): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\petrut ai\portfolio-petrut123\ai_steering_behaviours\aiframework\baseentity.cpp(97): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  AIFramework.vcxproj -> C:\Petrut AI\portfolio-petrut123\AI_Steering_Behaviours\AIFramework\Debug\AIFramework.exe
+e:\programe\ai protfolio\portfolio-petrut123\ai_steering_behaviours\aiframework\baseentity.h(134): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\programe\ai protfolio\portfolio-petrut123\ai_steering_behaviours\aiframework\baseentity.h(190): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\programe\ai protfolio\portfolio-petrut123\ai_steering_behaviours\aiframework\baseentity.h(251): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\programe\ai protfolio\portfolio-petrut123\ai_steering_behaviours\aiframework\baseentity.cpp(63): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+  main.cpp
+e:\programe\ai protfolio\portfolio-petrut123\ai_steering_behaviours\aiframework\baseentity.h(134): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\programe\ai protfolio\portfolio-petrut123\ai_steering_behaviours\aiframework\baseentity.h(190): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\programe\ai protfolio\portfolio-petrut123\ai_steering_behaviours\aiframework\baseentity.h(251): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
+  AIFramework.vcxproj -> E:\programe\AI protfolio\portfolio-petrut123\AI_Steering_Behaviours\AIFramework\Debug\AIFramework.exe

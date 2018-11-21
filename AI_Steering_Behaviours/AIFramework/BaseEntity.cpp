@@ -31,24 +31,14 @@ BaseEntity::~BaseEntity()
 
 void BaseEntity::Think(sf::RenderWindow &window)
 {
-	//Flocking behaviour
+	//Flocking behaviour (increase the number of boids)
 	//FlockBehaviour();
 
 	//Seek behaviour (pass true for seek and false for flee)
 	//SeekFleeBehaviour(window, true);
-	sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-	float distance = std::sqrt(std::powf(mousePosition.x - this->getPosition().x, 2) + (std::powf(mousePosition.y - this->getPosition().y, 2)));
 
-	float ramped_speed = 0.1f * (distance) / 30.0f;
-
-	if (ramped_speed > 0.1f)
-	{
-		ramped_speed = 0.1f;
-	}
-
-	//float desiredVelocity = (ramped_speed / distance);
-
-
+	//Arrival behaviour
+	//ArrivalBehaviour(window);
 }
 
 void BaseEntity::Initialize()
